@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace Adventure_Game_2._0
     {
         const int verSize = 60;
         const int horSize = 125;
-        const int newNumberPerMove = 10;
-        const int newOperatorsPerMove = 6;
+        const int newNumberPerMove = 8;
+        const int newOperatorsPerMove = 5;
         static string[] ops = { "+", "-", "*", "/", "B" };
         static Random rand = new Random();
         static List<int> readHighScore()
@@ -114,11 +114,11 @@ namespace Adventure_Game_2._0
             {
                 for (int j = 0; j < maze.GetLength(1); j++)
                 {
-                    maze[i, j] = '#';
+                    maze[i, j] = ' ';
                     visited[i, j] = false;
                 }
             }
-            genMaze(1, 0, maze, visited);
+            genMaze(0, 0, maze, visited);
         }
         static void printMaze(char[,] maze)
         {
@@ -154,7 +154,7 @@ namespace Adventure_Game_2._0
                 y = rand.Next(0, horSize);
             }
             item.update(x, y);
-            item.display(maze);
+            item.display(maze, item.get());
         }
         static void updateMaze(char[,] maze)
         {
@@ -170,9 +170,16 @@ namespace Adventure_Game_2._0
             {
                 for (int j = 0; j < maze.GetLength(1); j++)
                 {
-                    if (rand.Next(1, 10) == 1 && maze[i, j] != '#' && maze[i, j] != 'C') maze[i, j] = ' ';
+                    if (rand.Next(1, 15) == 1 && maze[i, j] != '#' && maze[i, j] != 'C')
+                    {
+                        maze[i, j] = ' ';
+                        Console.CursorLeft = j;
+                        Console.CursorTop = i + 4;
+                        Console.Write(' ');
+                    }
                 }
             }
+
         }
         static Fraction convert2Frac(string str)
         {
@@ -193,7 +200,7 @@ namespace Adventure_Game_2._0
             {
                 if (ops.Contains(val))
                 {
-                    if (RPN.Peek().outputStrFrac() == "0/0" && val == "/")
+                    if (RPN.Peek().denominator == 0 && val == "/")
                     {
                         moveleft = -2;
                         return "";
@@ -231,17 +238,23 @@ namespace Adventure_Game_2._0
             else
                 targetNum = new Fraction(rand.Next(-(int)Math.Pow(10, mazeNum) / 2, (int)Math.Pow(10, mazeNum)) / 2, rand.Next(1, 10 * mazeNum)).outputStrFrac() + " ";
             initMaze(maze);
-            player.display(maze);
+            Console.Clear();
+            player.display(maze, player.get());
+            Console.CursorLeft = 0;
+            Console.CursorTop = 4;
+            printMaze(maze);
             while (moveLeft > -1)
             {
-                Console.Clear();
+                Console.CursorLeft = 0;
+                Console.CursorTop = 0;
                 Console.WriteLine($"Your score: {mazeNum - 1}");
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.CursorLeft = 0;
                 Console.WriteLine($"Move(s) left: {moveLeft}");
                 Console.Write($"Target number: {targetNum}");
                 Fraction f = convert2Frac(targetNum);
                 Console.WriteLine(targetNum.Contains("/") && f.numerator > f.denominator ? $" = {f.outputStrMixFrac()}" : "");
                 Console.WriteLine($"Current expression: {expression}\n");
-                printMaze(maze);
                 char item = player.move(maze, ref expression);
                 if (item == 'B')
                 {
@@ -266,6 +279,7 @@ namespace Adventure_Game_2._0
         }
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
             Console.SetWindowSize(horSize + 10, verSize + 10);
             Console.WriteLine(@"Welcome to the Adventure Game 2.0 : RPN Maze
 You are a character in the maze, try to form the target number using number and operators to form expressions.
