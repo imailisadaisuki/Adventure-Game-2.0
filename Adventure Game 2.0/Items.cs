@@ -40,6 +40,8 @@ namespace Adventure_Game_2._0
                 case ConsoleKey.C:
                     exp = "";
                     return 'N';
+                default:
+                    return 'N';
             }
             if (!inRange(newX, newY, maze.GetLength(0), maze.GetLength(1)) || maze[newX, newY] == '#') return 'N';
             char item = maze[newX, newY];
