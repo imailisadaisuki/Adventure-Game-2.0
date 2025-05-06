@@ -243,7 +243,7 @@ namespace Adventure_Game_2._0
             Console.CursorLeft = 0;
             Console.CursorTop = 4;
             printMaze(maze);
-            while (moveLeft > -1)
+            while (moveLeft > 0)
             {
                 Console.CursorLeft = 0;
                 Console.CursorTop = 0;
@@ -292,11 +292,11 @@ The game will over if you either:
 2. Form an invalid expression (put less than 2 values in front of an operator)
 3. Divide by zero
 4. Step onto a bomb (B)
-You have a maximum of 1000 moves, try to get the highest score possible.
+You have a maximum of 500 moves, try to get the highest score possible.
 Press any key to continue.");
             Console.ReadKey();
             Console.Clear();
-            int mazeNum = 0, moveLeft = 1000;
+            int mazeNum = 0, moveLeft = 500;
             bool canFrac = false, canNega = false;
             List<int> highScore = readHighScore();
             int option = menu(ref canFrac, ref canNega, highScore);
