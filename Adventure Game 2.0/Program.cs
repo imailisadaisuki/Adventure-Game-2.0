@@ -249,6 +249,7 @@ namespace Adventure_Game_2._0
                 Console.CursorTop = 0;
                 Console.WriteLine($"Your score: {mazeNum - 1}");
                 Console.Write(new string(' ', Console.WindowWidth));
+                Console.CursorTop = 1;
                 Console.CursorLeft = 0;
                 Console.WriteLine($"Move(s) left: {moveLeft}");
                 Console.Write($"Target number: {targetNum}");
